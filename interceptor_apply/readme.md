@@ -21,11 +21,11 @@
 
 ```js
 const apiCaller = (domain) => (params) => {
-    return fetchSomething(domain, params);
+  return fetchSomething(domain, params);
 };
 //宣告 domainA、domainB，若之後跟 domainA 相關的 API 都透過 domainA 做呼叫
-const domainA = apiCaller('domainA');
-const domainB = apiCaller('domainB');
+const domainA = apiCaller("domainA");
+const domainB = apiCaller("domainB");
 //呼叫
 domainA({ params: { userId: 1 } });
 domainB({ params: { companyId: 2 } });
@@ -57,9 +57,9 @@ axios 中，剛好有一個 interceptor 可以讓我們在發送請求、接受�
 ```js
 //如果你有不同的 domain，也可以分別宣告，拆分成不同檔案進行呼叫，這裡統一宣告一個實例
 const domainA = axios.create({
-    baseURL: 'domainA/',
-    headers: { 'Content-Type': 'application/json' },
-    timeout: 20000,
+  baseURL: "domainA/",
+  headers: { "Content-Type": "application/json" },
+  timeout: 20000,
 });
 ```
 
@@ -71,11 +71,11 @@ const domainA = axios.create({
 
 ```js
 const preRequest = (config) => {
-    //do something ...
-    return config;
+  //do something ...
+  return config;
 };
 const handelError = (err) => {
-    return Promise.reject(err);
+  return Promise.reject(err);
 };
 
 instance.interceptors.request.use(preRequest, handelError);
@@ -156,34 +156,34 @@ methods:{
 
 ```js
 const preRequest = (config) => {
-    caches
-        .match(config.url)
-        .then((res) => {
-            if (res) {
-                config.cancelToken = new axios.CancelToken((cancel) => {
-                    cancel(res.text());
-                });
-            } else {
-                instance.get(config.url).then(({ data }) => {
-                    const myCache = caches.open(`${config.url}`);
-                    myCache.then((res) => {
-                        res.put(config.url, new Response(JSON.stringify(data.data)));
-                    });
-                });
-
-                return Promise.resolve('wow');
-            }
-        })
-        .catch((err) => {
-            console.log(err);
+  caches
+    .match(config.url)
+    .then((res) => {
+      if (res) {
+        config.cancelToken = new axios.CancelToken((cancel) => {
+          cancel(res.text());
         });
-    return config;
+      } else {
+        instance.get(config.url).then(({ data }) => {
+          const myCache = caches.open(`${config.url}`);
+          myCache.then((res) => {
+            res.put(config.url, new Response(JSON.stringify(data.data)));
+          });
+        });
+
+        return Promise.resolve("wow");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return config;
 };
 ```
 
 ### 1.5 總結
 
-> 其實 serviceWorker 就可以達到快取的判斷，可以想像他是一個在瀏覽器載入時在背景默默執行的一個線程，所以其實應該更好用，更直覺。
-> reject promise 其實也可以透過 axios 做到很多應用，結合 localStorage 可以做到權限的判斷、更多資料的緩存等等。
-> caches 也並非每個瀏覽器都有支援，所以在使用上要先去做 caches in window 的判斷。
-> 近幾年 PWA 的支援度已經越來越好，chrome 支援度已經很高，ios 雖然還有很多功能未開啟，但也有漸漸的在做 bug fix，在蘋果社群也常會看到 PWA 的關鍵字，希望未來有更多應用出現～～
+> 其實 serviceWorker 就可以達到快取的判斷，可以想像他是一個在瀏覽器載入時在背景默默執行的一個線程，所以其實應該更好用，更直覺。 <br>
+> reject promise 其實也可以透過 axios 做到很多應用，結合 localStorage 可以做到權限的判斷、更多資料的緩存等等。<br>
+> caches 也並非每個瀏覽器都有支援，所以在使用上要先去做 caches in window 的判斷。<br>
+> 近幾年 PWA 的支援度已經越來越好，chrome 支援度已經很高，ios 雖然還有很多功能未開啟，但也有漸漸的在做 bug fix，在蘋果社群也常會看到 PWA 的關鍵字，希望未來有更多應用出現～～<br>
