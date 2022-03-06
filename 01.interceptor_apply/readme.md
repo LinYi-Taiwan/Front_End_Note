@@ -39,7 +39,7 @@ domainB({ params: { companyId: 2 } });
 
 我希望透過攔截的方式，在發送請求、接受資源前都可以再做一次最後的掙扎（？
 
-![](../images/interceptorApply-1.png)
+![](./images/interceptorApply-1.png)
 
 2. 使用的工具介紹
 
@@ -115,7 +115,7 @@ instance.interceptors.response.use(preProcessResponse, handelError);
 2. 若是動態操作，資料流沒定義清楚的話會發生錯誤
 
 流程如下：
-![](../images/interceptorApply-2.png)
+![](./images/interceptorApply-2.png)
 
 在這裡我會使用快取的操作範例如下：
 
